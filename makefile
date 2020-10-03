@@ -47,7 +47,7 @@ PROJSRC_PATH = $(subst \,/,$(path))
 # 设置 VPATH 自动推导依赖关系的路径，用于 inplace 目标 main：在当前目录产生目标文件和可执行文件
 VPATH = $(PROJSRC_PATH)
 # 获取源文件列表，.c 和 .cpp 文件；原为 -type f \( -name '*.c' -o -name '*.cpp' \)
-SOURCES := $(shell find $(PROJSRC_PATH) -type f -name '*$(SUFFIX)' -exec basename {} \;)
+SOURCES := $(shell find $(PROJSRC_PATH) -maxdepth 1 -type f -name '*$(SUFFIX)' -exec basename {} \;)
 # 将源文件列表转换为 .o 目标文件列表；原为 $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCES)))
 OBJECTS := $(patsubst %$(SUFFIX),%.o,$(SOURCES))
 
