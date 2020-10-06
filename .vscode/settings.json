@@ -1,4 +1,5 @@
 {
+    "files.eol": "\n",
     "files.defaultLanguage": "cpp", // ctrl+N新建文件后默认的语言
 
     "C_Cpp.clang_format_sortIncludes": true, // 格式化时调整include的顺序（按字母排序）
