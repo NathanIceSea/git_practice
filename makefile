@@ -37,6 +37,14 @@ SUFFIX != \
 	else \
 		echo UNKNOWN_SUFFIX; \
 	fi
+OS != \
+	if [ '$(os)' = windows ]; then \
+		echo win; \
+	elif [ '$(os)' = linux ]; then \
+		echo linux; \
+	else \
+		echo unknown; \
+	fi
 # 以 /src 为坐标获取工作目录
 CUR_DIR = $(shell pwd)
 CWD = $(shell echo $(CUR_DIR) | sed 's/\/src.*//g')
@@ -53,14 +61,16 @@ SOURCES := $(shell find $(PROJSRC_PATH) -maxdepth 1 -type f -name '*$(SUFFIX)' -
 OBJECTS := $(patsubst %$(SUFFIX),%.o,$(SOURCES))
 
 
-# 通过工程目录作为名称的标志文件来判断是否仍在编译同一个工程，否则就要删除所有中间文件防止 make 编译出错
+# 通过 ".OS_工程目录" 作为名称的标志文件来判断是否仍在编译同一个工程，否则就要删除所有中间和目标文件防止 make 编译出错
 PROJNAME = $(shell echo $(PROJSRC_PATH) | sed 's/.*\///')
-PROJFLAG_PATH = $(BUILD_PATH)/$(PROJNAME)
+PROJFLAG_PATH = $(BUILD_PATH)/.$(OS)_$(PROJNAME)
 # BUILD_PATH 下没有 PROJNAME 文件则说明第一次编译该工程，必须先清理
 EXEC != \
 	if [ '$(wildcard $(PROJFLAG_PATH))' = '' ]; then \
-		cd $(BUILD_PATH) && $(RM) *; \
-		touch $(PROJNAME); \
+		echo 1; \
+		find $(BUILD_PATH) -type f -not -name ".git*" -delete; \
+		cd $(BUILD_PATH) && touch .$(OS)_$(PROJNAME); \
+		echo 0; \
 	fi
 
 
@@ -79,17 +89,11 @@ main: $(OBJECTS)
 
 .PHONY: debug clean
 debug:
-	@echo CC: $(CC)
-	@echo FLAGS: $(FLAGS)
-	@echo SUFFIX: $(FLAGS)
-	@echo CUR_DIR: $(CUR_DIR)
-	@echo CWD: $(CWD)
-	@echo BUILD_PATH: $(BUILD_PATH)
-	@echo PROJSRC_PATH: $(PROJSRC_PATH)
+	@echo CC, FLAGS, SUFFIX, OS: $(CC), $(FLAGS), $(SUFFIX), $(OS)
+	@echo CUR_DIR, CWD, BUILD_PATH, PROJSRC_PATH: $(CUR_DIR), $(CWD), $(BUILD_PATH), $(PROJSRC_PATH)
+	@echo PROJNAME, PROJFLAG_PATH, EXEC: $(PROJNAME), $(PROJFLAG_PATH), $(EXEC)
 	@echo SOURCES: $(SOURCES)
 	@echo OBJECTS: $(OBJECTS)
-	@echo PROJNAME: $(PROJNAME)
-	@echo PROJFLAG_PATH: $(PROJFLAG_PATH)
 
 clean:
 	find $(BUILD_PATH) -type f -not -name ".git*" -delete;
