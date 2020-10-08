@@ -75,7 +75,7 @@
         },
         {
             "label": "unsafe clean",
-            "command": "cd '${workspaceFolder}' && find ./build -type f -not -name '.git*' -delete && find . -type f -name '*.exe' -delete && find . -type f -name 'main' -delete && find . -type f -name '*.o' -delete && find . -type f -name 'tempCodeRunnerFile.*' -delete",
+            "command": "cd '${workspaceFolder}' && find ./build -type f -not -name '.git*' -delete && find . -type f -name '*.exe' -delete && find . -type f -name 'main' -delete && find . -type f -name '*.o' -delete && find . -type f -name 'tempCodeRunnerFile*' -delete",
             "type": "shell",
             "presentation": {
                 "echo": true,

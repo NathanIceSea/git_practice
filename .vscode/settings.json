@@ -25,4 +25,11 @@
 
     "clang.completion.enable": true, // 效果稍好，但对性能要求高卡；开启的话需要下面 Disabled
     "C_Cpp.autocomplete": "Disabled",
+
+
+    // Code Runner 在 build 中执行
+    "code-runner.executorMap": {
+        "c": "cd $dir && gcc -std=c11 -g '$fileName' -o '$workspaceRoot/build/$fileNameWithoutExt' && '$workspaceRoot/build/$fileNameWithoutExt'",
+        "cpp": "cd $dir && g++ -std=c++17 -g '$fileName' -o '$workspaceRoot/build/$fileNameWithoutExt' && '$workspaceRoot/build/$fileNameWithoutExt'",
+    }
 }
